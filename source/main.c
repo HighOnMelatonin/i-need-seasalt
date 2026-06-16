@@ -18,7 +18,7 @@ int main(void)
         char cwd[1024];
         if (getcwd(cwd, sizeof(cwd)) != NULL)
         {
-
+            printf(&cmd);
             snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
         }
         else
