@@ -80,3 +80,6 @@ void type_prompt()
   printf("\033[1;32m%s\033[1;37m:\033[1;32m%s\033[1;37m$$\033[0m ", username, cwd);
   // printf("$$ ");  // Print the shell prompt
 }
+
+
+
