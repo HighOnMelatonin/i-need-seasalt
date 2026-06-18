@@ -74,5 +74,9 @@ void type_prompt()
     first_time = 0;
   }
   fflush(stdout); // Flush the output buffer
-  printf("$$ ");  // Print the shell prompt
+  char cwd[1024];
+  getcwd(cwd, sizeof(cwd));
+  char *username = getlogin();
+  printf("\033[1;32m%s\033[1;37m:\033[1;32m%s\033[1;37m$$\033[0m ", username, cwd);
+  // printf("$$ ");  // Print the shell prompt
 }
