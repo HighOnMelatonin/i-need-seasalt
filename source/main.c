@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "builtins.h"
 
 // The main function where the shell's execution begins
 int main(void)
@@ -16,53 +17,33 @@ int main(void)
         // Formulate the full path of the command to be executed
         char full_path[PATH_MAX];
         char cwd[1024];
-        if (strcmp(cmd[0],"cd") == 0){
-            if (cmd[1]==NULL){
-                char *home = getenv("HOME");
-                if (home == NULL){
-                    printf("Could not find home");
-                }
-                else if(chdir(home)!=0){ //implement home here
-                    perror("chdir error");}
-                }
-            else{
-                if (cmd[2] != NULL){
-                    printf("Usage: cd path/to/destination");
-                }
-                else{
-                    if (chdir(cmd[1])!=0){
-                        perror("cseshell"); //need to print error
-                    }
-                }
-            }
-        }
-        else {
-        char path[PATH_MAX];
-        char full_path[PATH_MAX];
-
-        ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
-        if (len != -1) {
-            path[len] = '\0';
-            char *last_slash = strrchr(path, '/');
-            if (last_slash != NULL) {
-                *last_slash = '\0';}
-            snprintf(full_path, sizeof(full_path), "%s/bin/%s", path, cmd[0]);
+        if (getcwd(cwd, sizeof(cwd)) != NULL)
+        {
+            snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
         }
         else
         {
             perror("readlink failed");
             exit(1);
         }
-    
-    execv(full_path, cmd);
+        if (strcmp(cmd[0], "env") == 0){
+            printf("%s \n",cmd[0]);
+        }
+        else if (strcmp(cmd[0], "setenv") == 0){
+            // set environment
 
-        // If execv returns, command execution has failed
-        printf("Command %s not found\n", cmd[0]);    
-    }
-        
+            printf("%s \n", cmd[1]);
+        }
+        else{
+            printf("Command %s does not exist\n", cmd[0]);
+        }
+
+        execv(full_path, cmd);
+        for (int i = 0; cmd[i] != NULL; i++){
+            cmd[i] = NULL;
+        }
 
         type_prompt();
-        // To do: clear cmd so it doesn't repeat
         read_command(cmd);
 
     }
