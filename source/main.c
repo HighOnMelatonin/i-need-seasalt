@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "builtins.h"
+// #include "builtins.h"
 
 // The main function where the shell's execution begins
 int main(void)
@@ -8,6 +8,8 @@ int main(void)
     char *cmd[MAX_ARGS];
     int child_status;
     pid_t pid;
+
+    printf(cmd[0]);
 
     type_prompt();     // Display the prompt
     read_command(cmd); // Read a command from the user
@@ -38,10 +40,10 @@ int main(void)
             printf("Command %s does not exist\n", cmd[0]);
         }
 
-        execv(full_path, cmd);
         for (int i = 0; cmd[i] != NULL; i++){
-            cmd[i] = NULL;
+            free(cmd[i]);
         }
+        execv(full_path, cmd);
 
         type_prompt();
         read_command(cmd);
