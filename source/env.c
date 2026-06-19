@@ -1,13 +1,19 @@
 // environment manager
 // includes functions for viewing and editing the environment
-#include <stdio.h>
-#include <stdlib.h>
+#include "shell.h"
 
 // Declaration of the external variable 'environ'
 extern char** environ;
 
-int env(){
+int list_env(char **args){
     // Print the environment variables
+    if(args[1]!=NULL){
+    if(strcmp(args[1],"-h")==0){
+        printf("Usage: type env to print environemnt variables\n");
+        return 0;
+    }
+    return 1;
+    }
     char** env = environ;   // Pointer to the array of environment strings
 
     while (*env) {
@@ -18,7 +24,7 @@ int env(){
     return 0;
 }
 
-int setenv(char **args){
+int setenv_var(char **args){
     /*
     Sets environment variable
 
@@ -27,11 +33,19 @@ int setenv(char **args){
 
     No output
     */
+    if(args[1]== NULL){
+        printf("Usage: setenv KEY=VALUE to set environment variable KEY\n");
+        return 1;
+    }
+    if(strcmp(args[1],"-h")==0){
+        printf("Usage: setenv KEY=VALUE to set environment variable KEY\n");
+        return 0;
+    }
     char* end = strchr(args[1], '=');
-    if (end == "NULL"){
+    if (end == NULL){
         // there is no value assignment
-        printf("Missing args: VALUE");
-        printf("Usage: setenv KEY=VALUE");
+        printf("Missing args: VALUE\n");
+        printf("Usage: setenv KEY=VALUE\n");
         return 1;
     }
     else{
@@ -41,9 +55,17 @@ int setenv(char **args){
     }
 }
 
-int unsetenv(char **args){
+int unsetenv_var(char **args){
     /*
     Removes the environment variable
     */
+    if(args[1]== NULL){
+        printf("Usage: type unsetenv KEY to remove environment variable KEY\n");
+        return 1;
+    }
+    if(strcmp(args[1],"-h")==0){
+        printf("Usage: type unsetenv KEY to remove environment variable KEY\n");
+        return 0;
+    }
     return unsetenv(args[1]);
 }

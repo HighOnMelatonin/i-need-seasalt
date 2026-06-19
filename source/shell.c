@@ -20,8 +20,9 @@ void read_command(char **cmd)
   {
     // Read a single character from standard input
     int current_char = fgetc(stdin);
+
     // Store the character in the line array and increment count
-    line[count++] = (char)current_char;
+      line[count++] = (char)current_char;
     // If a newline character is encountered, break out of the loop
     if (current_char == '\n')
       break;
