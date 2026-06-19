@@ -28,11 +28,6 @@ int main(void)
     char *cmd[MAX_ARGS];
     int child_status;
     pid_t pid;
-
-<<<<<<< HEAD
-    // type_prompt();     // Display the prompt
-    // read_command(cmd); // Read a command from the user
-=======
     type_prompt();// Display the prompt
 
     for (int i = 0; i < MAX_ARGS; i++)
@@ -51,7 +46,6 @@ int main(void)
         for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
         read_command(cmd);
         }
->>>>>>> origin/main
 
     // If the command is "exit", break out of the loop to terminate the shell
     while (strcmp(cmd[0], "exit") != 0){
@@ -131,7 +125,6 @@ int main(void)
 }
 }exit(0);}
 
-<<<<<<< HEAD
     // Helper function to figure out how many builtin commands are supported by the shell
 int num_builtin_functions()
 {
@@ -151,4 +144,3 @@ int builtin_func_check(char *args[]){
         }
         
     }return -2;}
->>>>>>> origin/main
