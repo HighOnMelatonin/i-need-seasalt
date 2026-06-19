@@ -1,5 +1,5 @@
 #include "shell.h"
-// #include "builtins.h"
+// #include "usage.h"
 
 
 
@@ -29,11 +29,51 @@ int main(void)
     int child_status;
     pid_t pid;
 
-    type_prompt();     // Display the prompt
-    read_command(cmd); // Read a command from the user
+<<<<<<< HEAD
+    // type_prompt();     // Display the prompt
+    // read_command(cmd); // Read a command from the user
+=======
+    type_prompt();// Display the prompt
+
+    for (int i = 0; i < MAX_ARGS; i++)
+    {
+    cmd[i] = NULL;
+    }   
+
+    read_command(cmd);// Read a command from the user
+
+    
+
+    //empty command
+    while (cmd[0] == NULL)
+        {
+        type_prompt();
+        for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
+        read_command(cmd);
+        }
+>>>>>>> origin/main
 
     // If the command is "exit", break out of the loop to terminate the shell
     while (strcmp(cmd[0], "exit") != 0){
+        //usage
+//         if (strcmp(cmd[0], "usage") == 0)
+// {
+//     shell_usage(cmd);
+
+//     type_prompt();
+//     for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
+//     read_command(cmd);
+
+//     while (cmd[0] == NULL)
+//     {
+//         type_prompt();
+//         for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
+//         read_command(cmd);
+//     }
+
+//     continue;
+// }
+
         // Formulate the full path of the command to be executed
         char full_path[PATH_MAX];
         char cwd[1024];
@@ -80,15 +120,23 @@ int main(void)
         } 
         }}
         type_prompt();
+        // To do: clear cmd so it doesn't repeat
+        for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
         read_command(cmd);
+                while (cmd[0] == NULL)
+{
+    type_prompt();
+    for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;} 
+    read_command(cmd);
+}
 }exit(0);}
 
+<<<<<<< HEAD
     // Helper function to figure out how many builtin commands are supported by the shell
 int num_builtin_functions()
 {
     return (sizeof(builtin_commands) / sizeof(char *));
 };
-
 
 int builtin_func_check(char *args[]){
     // Loop through our command list and check if the commands exist in the builtin command list
@@ -103,3 +151,4 @@ int builtin_func_check(char *args[]){
         }
         
     }return -2;}
+>>>>>>> origin/main
