@@ -86,7 +86,7 @@ int main(void)
     // Helper function to figure out how many builtin commands are supported by the shell
 int num_builtin_functions()
 {
-    return (sizeof(builtin_commands) / sizeof(char *)+2);
+    return (sizeof(builtin_commands) / sizeof(char *));
 };
 
 

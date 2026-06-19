@@ -7,9 +7,12 @@ extern char** environ;
 
 int list_env(char **args){
     // Print the environment variables
+    if(args[1]!=NULL){
     if(strcmp(args[1],"-h")==0){
         printf("Usage: type env to print environemnt variables\n");
         return 0;
+    }
+    return 1;
     }
     char** env = environ;   // Pointer to the array of environment strings
 
@@ -30,6 +33,10 @@ int setenv_var(char **args){
 
     No output
     */
+    if(args[1]== NULL){
+        printf("Usage: setenv KEY=VALUE to set environment variable KEY\n");
+        return 1;
+    }
     if(strcmp(args[1],"-h")==0){
         printf("Usage: setenv KEY=VALUE to set environment variable KEY\n");
         return 0;
@@ -52,6 +59,10 @@ int unsetenv_var(char **args){
     /*
     Removes the environment variable
     */
+    if(args[1]== NULL){
+        printf("Usage: type unsetenv KEY to remove environment variable KEY\n");
+        return 1;
+    }
     if(strcmp(args[1],"-h")==0){
         printf("Usage: type unsetenv KEY to remove environment variable KEY\n");
         return 0;
