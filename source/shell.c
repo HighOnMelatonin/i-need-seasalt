@@ -18,12 +18,11 @@ void read_command(char **cmd)
   // reached
   for (;;)
   {
-    
-      // Read a single character from standard input
-      int current_char = fgetc(stdin);
-    if(current_char != 9){
-      // Store the character in the line array and increment count
-      line[count++] = (char)current_char;}
+    // Read a single character from standard input
+    int current_char = fgetc(stdin);
+
+    // Store the character in the line array and increment count
+      line[count++] = (char)current_char;
     // If a newline character is encountered, break out of the loop
     if (current_char == '\n')
       break;
@@ -58,7 +57,6 @@ void read_command(char **cmd)
   }
   // Null-terminate the cmd array to mark the end of arguments
   cmd[i] = NULL;
-  count == 1;
 }
 
 // Function to display the shell prompt

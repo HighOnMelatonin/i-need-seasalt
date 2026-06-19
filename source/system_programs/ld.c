@@ -8,6 +8,10 @@ int execute(char **args)
 {
     if (args[1] != NULL)
     {
+        if(strcmp(args[1],"-h")==0){
+            printf("Usage: type ld to list all items in the cwd\n OR type ld path/to/dir to list all items in dir");
+            return 0;
+        }
         char *token = strtok(args[1], SHELL_OPT_DELIM);
         // printf("Token is %s\n", token);
 

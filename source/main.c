@@ -1,6 +1,26 @@
 #include "shell.h"
 // #include "builtins.h"
 
+
+
+    const char *builtin_commands[] = {
+    "cd",    // Changes the current directory of the shell to the specified path. If no path is given, it defaults to the user's home directory.
+    "help",  //  List all builtin commands in the shell
+    "env", // Lists all the environment variables currently set in the shell
+    "setenv", // Sets or modifies an environment variable for this shell session
+    "unsetenv", // Removes an environment variable from the shell
+    "clear"
+    };
+    /*** This is array of functions, with argument char ***/
+    int (*builtin_command_func[])(char **) = {
+    &shell_cd,     // builtin_command_func[0]: cd 
+    &shell_help,   // builtin_command_func[1]: help
+    &list_env,     // builtin_command_func[4]: env
+    &setenv_var,  // builtin_command_func[5]: setenv
+    &unsetenv_var, // builtin_command_func[6]: unsetenv
+    &shell_clear
+    };
+
 // The main function where the shell's execution begins
 int main(void)
 {
@@ -8,8 +28,6 @@ int main(void)
     char *cmd[MAX_ARGS];
     int child_status;
     pid_t pid;
-
-    printf(cmd[0]);
 
     type_prompt();     // Display the prompt
     read_command(cmd); // Read a command from the user
@@ -19,27 +37,30 @@ int main(void)
         // Formulate the full path of the command to be executed
         char full_path[PATH_MAX];
         char cwd[1024];
-        if (strcmp(cmd[0],"cd") == 0){
-            if (cmd[1]==NULL){
-                char *home = getenv("HOME");
-                if (home == NULL){
-                    printf("Could not find home");
-                }
-                else if(chdir(home)!=0){ //implement home here
-                    perror("chdir error");}
-                }
+        bool skipped = false;
+        if(strcmp(cmd[0],"usage")==0){
+        if(cmd[1]==NULL||cmd[2]!=NULL){
+            skipped = true;
+            printf("Usage: type usage <cmd> to get usage of command");
+        }else{
+            if(strcmp(cmd[1],"usage")==0||strcmp(cmd[1],"-h")==0){
+                skipped = true;
+                printf("Usage: type usage <cmd> to get usage of command");
+            }
+            else if(strcmp(cmd[1],"exit")==0){
+                skipped = true;
+                printf("Usage: type exit to terminate and exit the shell");
+            }
             else{
-                if (cmd[2] != NULL){
-                    printf("Usage: cd path/to/destination");
-                }
-                else{
-                    if (chdir(cmd[1])!=0){
-                        perror("cseshell"); //need to print error
-                    }
-                }
+                cmd[0] = cmd[1];
+                cmd[1] = "-h";
+                cmd[2] = NULL;
             }
         }
-        else {
+
+        }
+        if (skipped == false){
+        if(builtin_func_check(cmd)==-2) {
         char path[PATH_MAX];
         char full_path[PATH_MAX];
 
@@ -52,22 +73,33 @@ int main(void)
             snprintf(full_path, sizeof(full_path), "%s/bin/%s", path, cmd[0]);
             execv(full_path, cmd);
             // If execv returns, command execution has failed
-            printf("Command %s not found\n", cmd[0]);   
-        if (getcwd(cwd, sizeof(cwd)) != NULL)
-        {
-            snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
-        }
+            printf("Command %s not found\n", cmd[0]);}
         else
         {
             perror("readlink failed");
         } 
-    }
+        }}
+        // type_prompt();
+        // read_command(cmd);
+}exit(0);}
+
+    // Helper function to figure out how many builtin commands are supported by the shell
+int num_builtin_functions()
+{
+    return (sizeof(builtin_commands) / sizeof(char *)+2);
+};
+
+
+int builtin_func_check(char *args[]){
+    // Loop through our command list and check if the commands exist in the builtin command list
+        for (int command_index = 0; command_index < num_builtin_functions(); command_index++)
+        {
         
-
-        type_prompt();
-        read_command(cmd);
-
-    }
-    
-    exit(0);
-}
+        if (strcmp(args[0], builtin_commands[command_index]) == 0) // Assume args[0] contains the first word of the command
+        {
+        // We will create new process to run the function with the specific command except for builtin commands.
+        // These have to be done by the shell process.
+        return (*builtin_command_func[command_index])(args);
+        }
+        
+    }return -2;}

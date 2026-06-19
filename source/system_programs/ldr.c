@@ -19,7 +19,7 @@ void print_path_with_colored_slash(const char *path)
 }
 
 void list_directory(const char *basePath)
-{
+{   
     char path[1000];
     struct dirent *dp;
     DIR *dir = opendir(basePath);
@@ -57,8 +57,15 @@ void list_directory(const char *basePath)
     closedir(dir);
 }
 
-int main()
+int main(int argc, char**args)
 {
+    if (args[1]!=NULL){
+        printf("Usage: type ldr to list all items recursively in the cwd");
+    if(strcmp(args[1],"-h")==0){
+        return 0;
+    }
+    return 1;
+    }
     // printf("Recursively listing all visible files under the current directory with permissions:\n");
     list_directory(".");
 

@@ -4,6 +4,11 @@
 */
 int execute(char **args)
 {
+    if (strcmp(args[1],"-h")==0)
+    {
+        printf("Usage: find [keyword], to find any matching filename in this directory or its children\n");
+        return 0;
+    }
 
     if (args[1] == NULL)
     {
