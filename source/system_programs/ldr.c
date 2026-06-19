@@ -60,7 +60,7 @@ void list_directory(const char *basePath)
 int main(int argc, char**args)
 {
     if (args[1]!=NULL){
-        printf("Usage: type ldr to list all items recursively in the cwd");
+        printf("Usage: type ldr to list all items recursively in the cwd\n");
     if(strcmp(args[1],"-h")==0){
         return 0;
     }

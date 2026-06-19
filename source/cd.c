@@ -4,7 +4,7 @@ int shell_cd(char **args){
     if (args[1]==NULL){
                 char *home = getenv("HOME");
                 if (home == NULL){
-                    printf("Could not find home");
+                    printf("Could not find home\n");
                     return 1;
                 }
                 else if(chdir(home)!=0){ //implement home here
@@ -13,11 +13,11 @@ int shell_cd(char **args){
                 }
             else{
                 if (strcmp(args[1],"-h")==0){
-                    printf("Usage: cd path/to/destination to change cwd to destiantion\n OR cd to change cwd to home");
+                    printf("Usage: cd path/to/destination to change cwd to destiantion\n OR cd to change cwd to home\n");
                     return 0;
                 }
                 if (args[2] != NULL){
-                    printf("Usage: cd path/to/destination to change cwd to destiantion\n OR cd to change cwd to home");
+                    printf("Usage: cd path/to/destination to change cwd to destiantion\n OR cd to change cwd to home\n");
                     return 1;
                 }
                 else{

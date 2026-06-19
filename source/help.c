@@ -3,7 +3,7 @@
 #include <dirent.h>
 int shell_help(char **args){
     if(args[1]!=NULL){
-        printf("Usage: type help to list all commands");
+        printf("Usage: type help to list all commands\n");
     if(strcmp(args[1],"-h")==0){
         return 0;
     }

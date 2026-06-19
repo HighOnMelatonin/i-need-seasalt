@@ -2,7 +2,7 @@
 
 int shell_clear(char **args){
     if(strcmp(args[1],"-h")==0){
-        printf("Usage: type clear to clear screen");
+        printf("Usage: type clear to clear screen\n");
         return 0;
     }
     #ifdef _WIN32

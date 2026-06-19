@@ -41,15 +41,15 @@ int main(void)
         if(strcmp(cmd[0],"usage")==0){
         if(cmd[1]==NULL||cmd[2]!=NULL){
             skipped = true;
-            printf("Usage: type usage <cmd> to get usage of command");
+            printf("Usage: type usage <cmd> to get usage of command\n");
         }else{
             if(strcmp(cmd[1],"usage")==0||strcmp(cmd[1],"-h")==0){
                 skipped = true;
-                printf("Usage: type usage <cmd> to get usage of command");
+                printf("Usage: type usage <cmd> to get usage of command\n");
             }
             else if(strcmp(cmd[1],"exit")==0){
                 skipped = true;
-                printf("Usage: type exit to terminate and exit the shell");
+                printf("Usage: type exit to terminate and exit the shell\n");
             }
             else{
                 cmd[0] = cmd[1];
@@ -79,8 +79,8 @@ int main(void)
             perror("readlink failed");
         } 
         }}
-        // type_prompt();
-        // read_command(cmd);
+        type_prompt();
+        read_command(cmd);
 }exit(0);}
 
     // Helper function to figure out how many builtin commands are supported by the shell
