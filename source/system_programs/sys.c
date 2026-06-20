@@ -27,7 +27,7 @@ int main(int argc, char **args){
     printf("Release     - %s \n", detect.release);
     printf("Version     - %s \n", detect.version);
     printf("Machine     - %s \n", detect.machine);
-    printf("Domain name - %s \n", detect.__domainname);
+    //printf("Domain name - %s \n", detect.__domainname);
     printf("User name   - %s \n", username);
     printf("Host name   - %s \n", hostname);
     return 0;

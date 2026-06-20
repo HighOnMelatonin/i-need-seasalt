@@ -49,7 +49,7 @@ int setenv_var(char **args){
         return 1;
     }
     else{
-        printf(args[1]);
+        printf("%s", args[1]);
 
         return putenv(args[1]);    // adds to environment variables, argument is in format name=value
     }
