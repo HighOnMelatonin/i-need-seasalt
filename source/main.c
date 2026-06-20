@@ -1,6 +1,6 @@
 #include "shell.h"
 // #include "usage.h"
-
+#include <stdbool.h>
 
 
     const char *builtin_commands[] = {
