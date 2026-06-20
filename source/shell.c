@@ -78,7 +78,7 @@ void type_prompt()
   char cwd[1024];
   getcwd(cwd, sizeof(cwd));
   char *username = getlogin();
-  printf("\033[1;32m%s\033[1;37m:\033[1;32m%s\033[1;37m$$\033[0m ", username, cwd);
+  printf("\033[1;%s%s\033[1;37m:\033[1;%s%s\033[1;37m$$\033[0m ", current_color,username,current_color, cwd);
   // printf("$$ ");  // Print the shell prompt
 }
 

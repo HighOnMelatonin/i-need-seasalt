@@ -8,8 +8,8 @@ extern char** environ;
 int list_env(char **args){
     // Print the environment variables
     if(args[1]!=NULL){
-    if(strcmp(args[1],"-h")==0){
         printf("Usage: type env to print environemnt variables\n");
+    if(strcmp(args[1],"-h")==0){
         return 0;
     }
     return 1;

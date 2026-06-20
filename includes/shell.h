@@ -30,8 +30,10 @@ int list_env(char **args);
 int setenv_var(char **args);
 int unsetenv_var(char **args);
 int shell_clear(char **args);
-
+int shell_setcolor(char **args);
 int num_builtin_functions();
 int builtin_func_check(char *args[]);
+
+extern char *current_color;
 
 #endif
