@@ -16,9 +16,7 @@ int (*builtin_command_func[])(char **) = {
     &shell_help,   // builtin_command_func[1]: help
     &list_env,     // builtin_command_func[4]: env
     &setenv_var,   // builtin_command_func[5]: setenv
-    &setenv_var,   // builtin_command_func[5]: setenv
     &unsetenv_var, // builtin_command_func[6]: unsetenv
-    &shell_clear};
     &shell_clear,
     &shell_setcolor
     };
@@ -31,12 +29,9 @@ int main(void)
     int child_status;
     pid_t pid;
     type_prompt(); // Display the prompt
-    type_prompt(); // Display the prompt
 
     for (int i = 0; i < MAX_ARGS; i++)
     {
-        cmd[i] = NULL;
-    }
         cmd[i] = NULL;
     }
 
@@ -47,7 +42,6 @@ int main(void)
 
     // empty command
     while (cmd[0] == NULL)
-    {
     {
         type_prompt();
         for (int i = 0; i < MAX_ARGS; i++)
@@ -60,15 +54,8 @@ int main(void)
         }
         read_command(cmd);
     }
-    }
 
     // If the command is "exit", break out of the loop to terminate the shell
-    while (strcmp(cmd[0], "exit") != 0)
-    {
-        // usage
-        //         if (strcmp(cmd[0], "usage") == 0)
-        // {
-        //     shell_usage(cmd);
     while (strcmp(cmd[0], "exit") != 0)
     {
         // usage
@@ -109,31 +96,8 @@ int main(void)
         {
             if (cmd[1] == NULL || cmd[2] != NULL)
             {
-        if (strcmp(cmd[0], "usage") == 0)
-        {
-            if (cmd[1] == NULL || cmd[2] != NULL)
-            {
                 skipped = true;
                 printf("Usage: type usage <cmd> to get usage of command\n");
-            }
-            else
-            {
-                if (strcmp(cmd[1], "usage") == 0 || strcmp(cmd[1], "-h") == 0)
-                {
-                    skipped = true;
-                    printf("Usage: type usage <cmd> to get usage of command\n");
-                }
-                else if (strcmp(cmd[1], "exit") == 0)
-                {
-                    skipped = true;
-                    printf("Usage: type exit to terminate and exit the shell\n");
-                }
-                else
-                {
-                    cmd[0] = cmd[1];
-                    cmd[1] = "-h";
-                    cmd[2] = NULL;
-                }
             }
             else
             {
