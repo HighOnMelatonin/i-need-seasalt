@@ -6,17 +6,19 @@ const char *builtin_commands[] = {
     "env",      // Lists all the environment variables currently set in the shell
     "setenv",   // Sets or modifies an environment variable for this shell session
     "unsetenv", // Removes an environment variable from the shell
-    "clear"
-};
-/*** This is array of functions, with argument char ***/
-int (*builtin_command_func[])(char **) = {
-    &shell_cd,     // builtin_command_func[0]: cd
+    "clear",
+    "setcolor"
+    };
+    /*** This is array of functions, with argument char ***/
+    int (*builtin_command_func[])(char **) = {
+    &shell_cd,     // builtin_command_func[0]: cd 
     &shell_help,   // builtin_command_func[1]: help
     &list_env,     // builtin_command_func[4]: env
     &setenv_var,   // builtin_command_func[5]: setenv
     &unsetenv_var, // builtin_command_func[6]: unsetenv
-    &shell_clear
-};
+    &shell_clear,
+    &shell_setcolor
+    };
 
 // The main function where the shell's execution begins
 int main(void)
