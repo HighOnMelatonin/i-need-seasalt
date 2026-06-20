@@ -4,17 +4,14 @@
 */
 int execute(char **args)
 {
+    if(args[1]==NULL){
+        printf("Usage: find [keyword], to find any matching filename in this directory or its children\n");
     if (strcmp(args[1],"-h")==0)
     {
-        printf("Usage: find [keyword], to find any matching filename in this directory or its children\n");
         return 0;
     }
-
-    if (args[1] == NULL)
-    {
-        printf("Usage: find [keyword], to find any matching filename in this directory or its children\n");
-        return 1;
-    }
+    return 1;
+}
 
     char *dir_name = args[0];
     char *to_match = args[1];
