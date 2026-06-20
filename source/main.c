@@ -182,15 +182,19 @@ int main(void)
                     else
                     {
                         perror("readlink failed");
-                    }    
+                    }
                 }
+                waitpid(pid, &child_status, 0);
             }
         }
+
         type_prompt();
+
         for (int i = 0; i < MAX_ARGS; i++)
         {
             cmd[i] = NULL;
         }
+
         read_command(cmd);
         while (cmd[0] == NULL)
         {
