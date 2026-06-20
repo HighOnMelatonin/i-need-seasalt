@@ -21,6 +21,20 @@ int shell_cd(char **args){
                     return 1;
                 }
                 else{
+                    if (strcmp(args[1], "-") == 0)
+                    {
+                    const char *oldpwd = getenv("OLDPWD");
+                    if (oldpwd == NULL)
+                    {
+                        fprintf(stderr, "No previous directory found.\n");
+                        return 1;
+                    }
+
+                    if (chdir(oldpwd) != 0)
+                    {
+                        perror("chdir");
+                        return 1;
+                    }}
                     if (chdir(args[1])!=0){
                         perror("cseshell"); //need to print error
                         return 1;
