@@ -47,10 +47,14 @@ int main(int argc, char **args){
     printf("Release     - %s \n", detect.release);
     printf("Version     - %s \n", detect.version);
     printf("Machine     - %s \n", detect.machine);
+    #ifdef __linux__
     printf("Domain name - %s \n", detect.__domainname);
+    #else
+    printf("Domain name - not available on this system\n");
+    #endif
     printf("User name   - %s \n", username);
     printf("Host name   - %s \n", hostname);
     printf("CPU Model   - %s \n", cpu_model);
-    printf("Memory      - %d \n", total_gb);
+    printf("Memory      - %.2f GB\n", total_gb);
     return 0;
 }

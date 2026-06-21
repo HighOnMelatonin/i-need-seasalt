@@ -1,6 +1,7 @@
 #include "shell.h"
 // #include "usage.h"
 #include <stdbool.h>
+#include "resource_usage.h"
 
 const char *builtin_commands[] = {
     "cd",       // Changes the current directory of the shell to the specified path. If no path is given, it defaults to the user's home directory.
@@ -37,8 +38,7 @@ int main(void)
 
     read_command(cmd); // Read a command from the user
 
-    // empty command
-    read_command(cmd); // Read a command from the user
+    
 
     // empty command
     while (cmd[0] == NULL)
@@ -58,35 +58,13 @@ int main(void)
     // If the command is "exit", break out of the loop to terminate the shell
     while (strcmp(cmd[0], "exit") != 0)
     {
-        // usage
-        //         if (strcmp(cmd[0], "usage") == 0)
-        // {
-        //     shell_usage(cmd);
+        //resource usage 
+       struct rusage before_usage;
+        struct rusage after_usage;
+        bool is_builtin = false;
 
-        //     type_prompt();
-        //     for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;}
-        //     read_command(cmd);
-        //     type_prompt();
-        //     for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;}
-        //     read_command(cmd);
+        
 
-        //     while (cmd[0] == NULL)
-        //     {
-        //         type_prompt();
-        //         for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;}
-        //         read_command(cmd);
-        //     }
-        //     while (cmd[0] == NULL)
-        //     {
-        //         type_prompt();
-        //         for (int i = 0; i < MAX_ARGS; i++){ cmd[i] = NULL;}
-        //         read_command(cmd);
-        //     }
-
-        //     continue;
-        // }
-        //     continue;
-        // }
 
         // Formulate the full path of the command to be executed
         char full_path[PATH_MAX];
@@ -119,9 +97,19 @@ int main(void)
                 }
             }
         }
+
+        char original_command[MAX_LINE];
+        snprintf(original_command, sizeof(original_command), "%s", cmd[0]);
+
+
         if (skipped == false)
         {
-            if (builtin_func_check(cmd) == -2)  // Not a built-in function
+            int check_result = builtin_func_check_lookup(cmd[0]);  // see Step 2 — just checks, doesn't run yet
+            is_builtin = (check_result != -2);
+
+            get_resource_snapshot(&before_usage, is_builtin);
+
+            if (check_result == -2)   // Not a built-in function
             {
                 pid_t pid = fork();
                 if (pid == 0)
@@ -142,14 +130,35 @@ int main(void)
                         execv(full_path, cmd);
                         // If execv returns, command execution has failed
                         printf("Command %s not found\n", cmd[0]);
+                        //terminate child process 
+                        exit(EXIT_FAILURE); 
                     }
                     else
                     {
                         perror("readlink failed");
+                        //terminate child process
+                        exit(EXIT_FAILURE); 
                     }
                 }
-                waitpid(pid, &child_status, 0);
+
+                else if (pid < 0)
+                {
+                    perror("fork");
+                }
+                else
+                {
+                    waitpid(pid, &child_status, 0);
+                }
             }
+            else
+            {
+                run_builtin(check_result, cmd);   // it IS a builtin — actually run it
+            }
+        
+
+        get_resource_snapshot(&after_usage, is_builtin);
+        print_resource_usage(original_command, before_usage, after_usage);
+
         }
 
         type_prompt();
@@ -179,17 +188,21 @@ int num_builtin_functions()
     return (sizeof(builtin_commands) / sizeof(char *));
 };
 
-int builtin_func_check(char *args[])
+// Returns the index of the builtin if found, or -2 if not a builtin. Does NOT run it.
+int builtin_func_check_lookup(char *cmd0)
 {
-    // Loop through our command list and check if the commands exist in the builtin command list
     for (int command_index = 0; command_index < num_builtin_functions(); command_index++)
     {
-        if (strcmp(args[0], builtin_commands[command_index]) == 0) // Assume args[0] contains the first word of the command
+        if (strcmp(cmd0, builtin_commands[command_index]) == 0)
         {
-            // We will create new process to run the function with the specific command except for builtin commands.
-            // These have to be done by the shell process.
-            return (*builtin_command_func[command_index])(args);
+            return command_index;
         }
     }
     return -2;
+}
+
+// Runs the builtin at the given index.
+int run_builtin(int index, char *args[])
+{
+    return (*builtin_command_func[index])(args);
 }

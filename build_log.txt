@@ -1,0 +1,66 @@
+gcc -I./includes -Wall -Wextra source/system_programs/backup.c source/libs/perms.c source/libs/rc_parser.c -o bin/backup
+source/system_programs/backup.c:3:14: warning: unused parameter 'argc' [-Wunused-parameter]
+    3 | int main(int argc, char **args){
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/system_programs/dcheck.c source/libs/perms.c source/libs/rc_parser.c -o bin/dcheck
+source/system_programs/dcheck.c:3:14: warning: unused parameter 'argc' [-Wunused-parameter]
+    3 | int main(int argc, char **args){
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/system_programs/dspawn.c source/libs/perms.c source/libs/rc_parser.c -o bin/dspawn
+source/system_programs/dspawn.c:91:9: warning: unused variable 'fd0' [-Wunused-variable]
+   91 |     int fd0=open("/dev/null",O_RDWR);
+      |         ^~~
+source/system_programs/dspawn.c:92:9: warning: unused variable 'fd1' [-Wunused-variable]
+   92 |     int fd1=dup(0);
+      |         ^~~
+source/system_programs/dspawn.c:93:9: warning: unused variable 'fd2' [-Wunused-variable]
+   93 |     int fd2=dup(0);
+      |         ^~~
+source/system_programs/dspawn.c:46:14: warning: unused parameter 'argc' [-Wunused-parameter]
+   46 | int main(int argc, char **args){
+      |              ^
+4 warnings generated.
+gcc -I./includes -Wall -Wextra source/system_programs/find.c source/libs/perms.c source/libs/rc_parser.c -o bin/find
+source/system_programs/find.c:98:14: warning: unused parameter 'argc' [-Wunused-parameter]
+   98 | int main(int argc, char **args)
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/system_programs/ld.c source/libs/perms.c source/libs/rc_parser.c -o bin/ld
+source/system_programs/ld.c:73:14: warning: unused parameter 'argc' [-Wunused-parameter]
+   73 | int main(int argc, char **args)
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/system_programs/ldr.c source/libs/perms.c source/libs/rc_parser.c -o bin/ldr
+source/system_programs/ldr.c:60:14: warning: unused parameter 'argc' [-Wunused-parameter]
+   60 | int main(int argc, char**args)
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/system_programs/sys.c source/libs/perms.c source/libs/rc_parser.c -o bin/sys
+source/system_programs/sys.c:3:14: warning: unused parameter 'argc' [-Wunused-parameter]
+    3 | int main(int argc, char **args){
+      |              ^
+1 warning generated.
+gcc -I./includes -Wall -Wextra source/cd.c source/clear.c source/env.c source/help.c source/main.c source/resource_usage.c source/setcolor.c source/shell.c source/usage.c source/libs/perms.c source/libs/rc_parser.c -o cseshell
+source/main.c:107:32: error: call to undeclared function 'builtin_func_check_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  107 |             int check_result = builtin_func_check_lookup(cmd[0]);  // see Step 2 — just checks, doesn't run yet
+      |                                ^
+source/main.c:107:32: note: did you mean 'builtin_func_check'?
+./includes/shell.h:35:5: note: 'builtin_func_check' declared here
+   35 | int builtin_func_check(char *args[]);
+      |     ^
+source/main.c:155:17: error: call to undeclared function 'run_builtin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  155 |                 run_builtin(check_result, cmd);   // it IS a builtin — actually run it
+      |                 ^
+source/main.c:70:14: warning: unused variable 'full_path' [-Wunused-variable]
+   70 |         char full_path[PATH_MAX];
+      |              ^~~~~~~~~
+source/main.c:71:14: warning: unused variable 'cwd' [-Wunused-variable]
+   71 |         char cwd[1024];
+      |              ^~~
+source/main.c:31:11: warning: unused variable 'pid' [-Wunused-variable]
+   31 |     pid_t pid;
+      |           ^~~
+3 warnings and 2 errors generated.
+make: *** [cseshell] Error 1
