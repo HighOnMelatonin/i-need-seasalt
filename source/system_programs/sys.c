@@ -21,7 +21,27 @@ int main(int argc, char **args){
     if (gethostname(hostname, sizeof(hostname)) != 0) {
         snprintf(hostname, sizeof(hostname), "unknown");
     }
+    FILE *f = fopen("/proc/cpuinfo","r");
+    if(f==NULL){
+        perror("fopen");
+        return 1;
+    }
+    char cpu_model[256];
+    char line[256];
+    while(fgets(line, sizeof(line),f)){
+        if(strncmp(line, "model name",10)==0){
+            char *colon = strchr(line,':');
+            if(colon){
+                snprintf(cpu_model, sizeof(cpu_model),"%s",colon+2);
+                cpu_model[strcspn(cpu_model,"\n")]=0;
 
+            }
+        }
+    }
+    long pages = sysconf(_SC_PHYS_PAGES);
+    long page_size = sysconf(_SC_PHYS_PAGES);
+    long long total_bytes = (long long)pages *page_size;
+    double total_gb = (double)total_bytes/(1024*1024*1024);
     printf("System name - %s \n", detect.sysname);
     printf("Nodename    - %s \n", detect.nodename);
     printf("Release     - %s \n", detect.release);
@@ -30,5 +50,7 @@ int main(int argc, char **args){
     printf("Domain name - %s \n", detect.__domainname);
     printf("User name   - %s \n", username);
     printf("Host name   - %s \n", hostname);
+    printf("CPU Model   - %s \n", cpu_model);
+    printf("Memory      - %d \n", total_gb);
     return 0;
 }
