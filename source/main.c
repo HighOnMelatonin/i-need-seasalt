@@ -69,9 +69,7 @@ int read_rc(){
         }
         snprintf(PATHSET, sizeof(PATHSET), "%s/.cseshellrc", path);        
     }
-    char tmp_rc_path[PATH_MAX+8];
-    snprintf(tmp_rc_path,sizeof(tmp_rc_path),"RC_FILE=%s",PATHSET);
-    putenv(tmp_rc_path);
+    
     FILE *pipe = fopen(PATHSET, "r");
     if (pipe == NULL) {
         perror("popen");

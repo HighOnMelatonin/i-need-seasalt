@@ -17,7 +17,7 @@ fi
 # Write a test rc file that runs a command with observable output
 cat > "$RC_FILE" << 'EOF'
 # This is a comment — should be ignored
-setenv TEST_RC_VAR hello_from_rc
+setenv TEST_RC_VAR=hello_from_rc
 EOF
 
 # Run the shell — just enter and exit immediately
