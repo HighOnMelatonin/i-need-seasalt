@@ -1,5 +1,8 @@
 #include "system_program.h"
-
+#include <sys/sysinfo.h>
+#ifdef linux
+#include <sys/statvfs.h>
+#endif
 int main(int argc, char **args){
     if(args[1]!=NULL){
         printf("Usage: type sys to get system information\n");
@@ -38,23 +41,25 @@ int main(int argc, char **args){
             }
         }
     }
-    long pages = sysconf(_SC_PHYS_PAGES);
-    long page_size = sysconf(_SC_PHYS_PAGES);
-    long long total_bytes = (long long)pages *page_size;
-    double total_gb = (double)total_bytes/(1024*1024*1024);
+    struct sysinfo info;
+    sysinfo(&info);
+    #ifdef linux
+    struct statvfs fiData;
+    if((statvfs("/",&fiData)) < 0 ) {
+                    perror("statvfs");
+            }
+    #endif
     printf("System name - %s \n", detect.sysname);
     printf("Nodename    - %s \n", detect.nodename);
     printf("Release     - %s \n", detect.release);
     printf("Version     - %s \n", detect.version);
     printf("Machine     - %s \n", detect.machine);
-    #ifdef __linux__
-    printf("Domain name - %s \n", detect.__domainname);
-    #else
-    printf("Domain name - not available on this system\n");
-    #endif
     printf("User name   - %s \n", username);
     printf("Host name   - %s \n", hostname);
     printf("CPU Model   - %s \n", cpu_model);
-    printf("Memory      - %.2f GB\n", total_gb);
+    printf("Memory      - %.2f GB\n", ((info.totalram/1024.0)/1024.0)/1024.0);
+    #ifdef linux
+    printf("Disk        - %.2f GB\n",(((fiData.f_blocks*fiData.f_bsize)/1024.0)/1024.0)/1024.0);
+    #endif
     return 0;
 }
