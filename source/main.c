@@ -2,6 +2,7 @@
 // #include "usage.h"
 #include <stdbool.h>
 #include "resource_usage.h"
+#include <signal.h>
 
 const char *builtin_commands[] = {
     "cd",       // Changes the current directory of the shell to the specified path. If no path is given, it defaults to the user's home directory.
@@ -22,6 +23,16 @@ int (*builtin_command_func[])(char **) = {
     &shell_setcolor
     };
 
+void sigintHandler(int sig_num){
+    /*
+    To catch signal interrupts(ctrl + c)
+
+    https://en.cppreference.com/c/program/SIG_types
+    */
+    signal(SIGINT, sigintHandler);
+    fflush(stdout);
+}
+
 // The main function where the shell's execution begins
 int main(void)
 {
@@ -29,6 +40,7 @@ int main(void)
     char *cmd[MAX_ARGS];
     int child_status;
     pid_t pid;
+    signal(SIGINT, sigintHandler);
     type_prompt(); // Display the prompt
 
     for (int i = 0; i < MAX_ARGS; i++)
