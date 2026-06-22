@@ -98,17 +98,15 @@ Run only integration tests (requires that `make` has been run first so `cseshell
 ```bash
 make integration
 ```
+# Additional Features
 
-For an explanation of what to test and how to structure your testable code, see the testing handout.
+## Inclusivity
 
-### AI-Assisted Unit Test Generation
 
-This project includes an optional wrapper for drafting unit tests with an AI agent. After writing a helper, you can run:
 
-```bash
-make ai-unit-tests MODULE=<helper_name>
-```
+## Sustainability
 
-This invokes `scripts/gen_unit_tests.sh`, which builds a prompt from `prompts/generate-unit-tests.md` and `AGENTS.md`. The script either pipes the prompt to your configured agent (via the `CSESHELL_AGENT_CMD` environment variable) or prints it to stdout for you to paste into a chat interface. See `AGENTS.md` for setup details and the rules agents follow.
+Our shell includes a resource usage feedback feature that displays resource consumption statistics after each command is executed. The information shown includes CPU time, memory usage, disk read operations, and disk write operations.
 
-You remain responsible for every test in your submission. You must be able to explain each test during checkoff.
+By providing immediate feedback on the resources consumed by each command, users gain greater awareness of the computational cost of their actions. This encourages more efficient use of system resources and promotes sustainable computing practices.
+
