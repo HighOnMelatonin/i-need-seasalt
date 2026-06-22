@@ -16,23 +16,44 @@ void read_command(char **cmd)
 
   // Infinite loop to read characters until a newline or maximum line length is
   // reached
-  for (;;)
-  {
-    // Read a single character from standard input
-    int current_char = fgetc(stdin);
-
-    // Store the character in the line array and increment count
-      line[count++] = (char)current_char;
-    // If a newline character is encountered, break out of the loop
-    if (current_char == '\n')
-      break;
-    // If the command exceeds the maximum length, print an error and exit
-    if (count >= MAX_LINE)
+      for (;;)
     {
-      printf("Command is too long, unable to process\n");
-      exit(1);
+  // Read a single character from standard input
+  int current_char = fgetc(stdin);
+
+  // If stdin has closed (user pressed ctrl+D, or piped input ran out), fgetc returns EOF
+  if (current_char == EOF)
+      {
+  // If nothing was typed yet, treat it the same as the user typing exit
+  if (count == 0)
+        {
+  cmd[0] = strdup("exit");
+  cmd[1] = NULL;
+  return;
+        }
+  // Otherwise process whatever characters were typed before EOF showed up
+  break;
+      }
+
+  // Check if the line is about to exceed the maximum length, leaving room for the null terminator
+  if (count >= MAX_LINE - 1)
+      {
+  printf("Command is too long, unable to process\n");
+  // Drain the rest of the current line so leftover characters do not get read as the next command
+  while (current_char != '\n' && current_char != EOF)
+  current_char = fgetc(stdin);
+  // Mark this command as empty so the shell just reprints the prompt
+  cmd[0] = NULL;
+  return;
+      }
+
+  // Store the character in the line array and increment count
+  line[count++] = (char)current_char;
+
+  // If a newline character is encountered, break out of the loop
+  if (current_char == '\n')
+  break;
     }
-  }
   // Null-terminate the command line string
   line[count] = '\0';
 
