@@ -5,7 +5,14 @@
 int get_history(char **args){
     // Function to get history
     if (args[1] == NULL){
-        FILE *file = fopen(".ss_history", "r");
+        char *username = getlogin();
+        if(username==NULL){
+            printf("User Home directory not found");
+            return 1;
+        }
+        char historypath[PATH_MAX];
+        snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
+        FILE *file = fopen(historypath, "r");
         if (file == NULL){
             perror("Failed to open history");
             return EXIT_FAILURE;
@@ -31,7 +38,14 @@ int get_history(char **args){
 int add_history(char **args){
     // Function to add cmd to history
     // "a" appends to file
-    FILE *file = fopen(".ss_history", "a");
+    char *username = getlogin();
+        if(username==NULL){
+            printf("User Home directory not found");
+            return 1;
+        }
+        char historypath[PATH_MAX];
+        snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
+    FILE *file = fopen(historypath, "a");
     if (file == NULL){
         perror("Failed to open history");
         return EXIT_FAILURE;
@@ -47,7 +61,14 @@ int add_history(char **args){
 int clear_history(){
     // Function to delete all entries
     // "w" overwrites the file, clearing history
-    FILE *file = fopen(".ss_history", "w");
+    char *username = getlogin();
+        if(username==NULL){
+            printf("User Home directory not found");
+            return 1;
+        }
+        char historypath[PATH_MAX];
+        snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
+    FILE *file = fopen(historypath, "w");
     if (file == NULL){
         perror("Failed to open history");
         return EXIT_FAILURE;
