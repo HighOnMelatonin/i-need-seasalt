@@ -49,7 +49,7 @@ int setenv_var(char **args){
         return 1;
     }
     else{
-        printf("%s\n", args[1]);
+        
 
         *end = '\0';          // split "KEY=VALUE" into "KEY" and "VALUE"
         char *key = args[1];
