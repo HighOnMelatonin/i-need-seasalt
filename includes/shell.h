@@ -36,6 +36,11 @@ int builtin_func_check(char *args[]);
 int builtin_func_check_lookup(char *cmd0);
 int run_builtin(int index, char *args[]);
 
+// History functions
+int get_history(char **args);
+int clear_history();
+int add_history(char **args);
+
 extern char *current_color;
 
 #endif
