@@ -89,7 +89,7 @@ int main(int argc, char **args){
     /*
     * Attach file descriptors 0, 1, and 2 to /dev/null. */
     int fd0=open("/dev/null",O_RDWR);
-    int fd1=dup(0);
-    int fd2=dup(0);
+    int fd1=open("/dev/null",O_RDWR);
+    int fd2=open("/dev/null",O_RDWR);
     daemon_work();
 }

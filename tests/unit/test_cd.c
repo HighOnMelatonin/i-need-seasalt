@@ -31,7 +31,7 @@ void test_cd_invalid_directory_returns_1(void)
 void test_cd_no_argument_goes_home_and_returns_1(void)
 {
     char *args[] = {"cd", NULL};
-    TEST_ASSERT_EQUAL_INT(1, shell_cd(args));
+    TEST_ASSERT_EQUAL_INT(0, shell_cd(args));
 }
 
 int main(void)

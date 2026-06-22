@@ -77,3 +77,4 @@ int main(void) {
     RUN_TEST(test_command_with_leading_whitespace);
     return UNITY_END();
 }
+
