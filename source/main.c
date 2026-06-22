@@ -39,7 +39,7 @@ int main(void)
     // Define an array to hold the command and its arguments
     char *cmd[MAX_ARGS];
     int child_status;
-    pid_t pid;
+    //pid_t pid;
     signal(SIGINT, sigintHandler);
     type_prompt(); // Display the prompt
 
@@ -79,8 +79,8 @@ int main(void)
 
 
         // Formulate the full path of the command to be executed
-        char full_path[PATH_MAX];
-        char cwd[1024];
+        //char full_path[PATH_MAX];
+        //char cwd[1024];
         bool skipped = false;
         if (strcmp(cmd[0], "usage") == 0)
         {
