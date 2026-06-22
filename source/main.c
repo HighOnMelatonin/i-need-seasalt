@@ -166,15 +166,15 @@ void sigintHandler(int sig_num){
     https://en.cppreference.com/c/program/SIG_types
     */
     signal(SIGINT, sigintHandler);
-    printf("Type \"exit\" to exit the shell");
+    printf("\nType \"exit\" to exit the shell\n");
     fflush(stdout);
 }
 
 // The main function where the shell's execution begins
 int main(void)
 {
-    auto_path();
-    read_rc();
+    //auto_path();
+    //read_rc();
     // Define an array to hold the command and its arguments
     char *cmd[MAX_ARGS];
     int child_status;
@@ -188,8 +188,6 @@ int main(void)
     }
 
     read_command(cmd); // Read a command from the user
-
-    
 
     // empty command
     while (cmd[0] == NULL)
@@ -210,17 +208,15 @@ int main(void)
     while (strcmp(cmd[0], "exit") != 0)
     {
         //resource usage 
-       struct rusage before_usage;
+        struct rusage before_usage;
         struct rusage after_usage;
         bool is_builtin = false;
-
-        
-
 
         // Formulate the full path of the command to be executed
         // char full_path[PATH_MAX];
         // char cwd[1024];
         bool skipped = false;
+
         if (strcmp(cmd[0], "usage") == 0)
         {
             if (cmd[1] == NULL || cmd[2] != NULL)
@@ -301,7 +297,7 @@ int main(void)
         }
 
         read_command(cmd);
-        while (cmd[0] == NULL)
+        while (cmd[0] == NULL)  // Loop for empty input
         {
             type_prompt();
             for (int i = 0; i < MAX_ARGS; i++)
@@ -310,7 +306,11 @@ int main(void)
             }
             read_command(cmd);
         }
+        //add_history(cmd);
     }
+
+    // clear shell history before exit
+    // clear_history();
     exit(0);
 }
 

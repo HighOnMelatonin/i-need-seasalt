@@ -108,6 +108,3 @@ username = "user";
 printf("\033[1;%s%s\033[1;37m:\033[1;%s%s\033[1;37m$$\033[0m ", current_color,username,current_color, cwd);
   // printf("$$ ");  // Print the shell prompt
 }
-
-
-

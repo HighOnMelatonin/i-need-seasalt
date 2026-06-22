@@ -8,3 +8,5 @@ cseshell
 tests/unit/bin
 tests/integration/bin
 dspawn.log
+.ss_history
+.cseshellrc
