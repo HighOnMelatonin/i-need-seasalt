@@ -87,6 +87,7 @@ Each program can be executed from the CSEShell once it is running. This starter 
 7. `help` - Displays the list of all available builtin functions
 8. `usage` - Displays how to use the specified builtin function
 9. `setcolor` - To change prompt colour
+10. `history` - To view command input history
 
 The codebase is structured such that each builtin function is its own C file to improve readability and to follow a more modular structure.
 
