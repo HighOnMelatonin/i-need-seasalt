@@ -51,7 +51,10 @@ int setenv_var(char **args){
     else{
         printf("%s\n", args[1]);
 
-        return putenv(args[1]);    // adds to environment variables, argument is in format name=value
+        *end = '\0';          // split "KEY=VALUE" into "KEY" and "VALUE"
+        char *key = args[1];
+        char *value = end + 1;
+        return setenv(key, value, 1);
     }
 }
 
