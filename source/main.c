@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "resource_usage.h"
 #include <signal.h>
+#include <stdio.h>
 
 const char *builtin_commands[] = {
     "cd",       // Changes the current directory of the shell to the specified path. If no path is given, it defaults to the user's home directory.
@@ -11,7 +12,8 @@ const char *builtin_commands[] = {
     "setenv",   // Sets or modifies an environment variable for this shell session
     "unsetenv", // Removes an environment variable from the shell
     "clear",
-    "setcolor"};
+    "setcolor",
+    "history"};
 /*** This is array of functions, with argument char ***/
 int (*builtin_command_func[])(char **) = {
     &shell_cd,     // builtin_command_func[0]: cd
@@ -20,7 +22,8 @@ int (*builtin_command_func[])(char **) = {
     &setenv_var,   // builtin_command_func[5]: setenv
     &unsetenv_var, // builtin_command_func[6]: unsetenv
     &shell_clear,
-    &shell_setcolor
+    &shell_setcolor,
+    &get_history
     };
 
 
@@ -167,14 +170,16 @@ void sigintHandler(int sig_num){
     */
     signal(SIGINT, sigintHandler);
     printf("\nType \"exit\" to exit the shell\n");
-    fflush(stdout);
+    // fflush(stdout);
 }
 
 // The main function where the shell's execution begins
 int main(void)
 {
-    //auto_path();
-    //read_rc();
+    auto_path();
+    clear_history();  // Initialize the history system
+    read_rc();
+    
     // Define an array to hold the command and its arguments
     char *cmd[MAX_ARGS];
     int child_status;
@@ -182,6 +187,7 @@ int main(void)
     signal(SIGINT, sigintHandler);
     type_prompt(); // Display the prompt
 
+    // clear input
     for (int i = 0; i < MAX_ARGS; i++)
     {
         cmd[i] = NULL;
@@ -197,16 +203,14 @@ int main(void)
         {
             cmd[i] = NULL;
         }
-        // for (int i = 0; i < MAX_ARGS; i++)
-        // {
-        //     cmd[i] = NULL;
-        // }
         read_command(cmd);
     }
 
     // If the command is "exit", break out of the loop to terminate the shell
     while (strcmp(cmd[0], "exit") != 0)
     {
+        add_history(cmd);  // Add the command to history
+        
         //resource usage 
         struct rusage before_usage;
         struct rusage after_usage;
@@ -306,11 +310,10 @@ int main(void)
             }
             read_command(cmd);
         }
-        //add_history(cmd);
     }
 
     // clear shell history before exit
-    // clear_history();
+    clear_history();
     exit(0);
 }
 
