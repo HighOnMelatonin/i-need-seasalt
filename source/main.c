@@ -166,6 +166,7 @@ void sigintHandler(int sig_num){
     https://en.cppreference.com/c/program/SIG_types
     */
     signal(SIGINT, sigintHandler);
+    printf("Type \"exit\" to exit the shell");
     fflush(stdout);
 }
 
@@ -198,10 +199,10 @@ int main(void)
         {
             cmd[i] = NULL;
         }
-        for (int i = 0; i < MAX_ARGS; i++)
-        {
-            cmd[i] = NULL;
-        }
+        // for (int i = 0; i < MAX_ARGS; i++)
+        // {
+        //     cmd[i] = NULL;
+        // }
         read_command(cmd);
     }
 
