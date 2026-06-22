@@ -3,6 +3,22 @@
 
 CSEShell is a simple, custom shell for Unix-based systems, designed to provide an interface for executing system programs. This project includes a basic shell implementation, a set of system programs (`find`, `ld`, `ldr`), and some test files.
 
+## Table of Contents
+- [CSEShell](#cseshell)
+  - [Table of Contents](#table-of-contents)
+  - [Directory Structure](#directory-structure)
+  - [Building the Project](#building-the-project)
+  - [Running CSEShell](#running-cseshell)
+  - [System Programs](#system-programs)
+  - [Builtin Functions](#builtin-functions)
+  - [Files Directory](#files-directory)
+  - [Makefile](#makefile)
+  - [Source Directory](#source-directory)
+  - [Testing](#testing)
+- [Additional Features](#additional-features)
+  - [Inclusivity](#inclusivity)
+  - [Sustainability](#sustainability)
+
 ## Directory Structure
 
 The project is organized as follows:
@@ -54,8 +70,25 @@ From there, you can execute built-in commands and any of the included system pro
 - `find.c` - Searches for files in a directory.
 - `ld.c` - List the contents of the curent directory.
 - `ldr.c` - List the contents of the current directory recursively.
+- `sys.c` - Prints out basic information about your operating system
+- `dspawn.c` - Summons a daemon process
+- `dcheck.c` - Program to check how many daemon processes were spawned from dspawn
+- `backup.c` - Zips a directory whose name matches the variable `BACKUP_DIR`
 
 Each program can be executed from the CSEShell once it is running. This starter code only allows the shell to execute a command once before exiting because `execv` replace the entire process' address space. Students need to fix this and allow the shell to prompt for more commands in Programming Assignment 1.
+
+## Builtin Functions
+1. `cd` - Changes the current working directory
+2. `exit` - Exits the terminal
+3. `clear` - Clears the screen
+4. `env` - View environment variables
+5. `setenv` - Set environment variables
+6. `unsetenv` - Deletes the environment variable
+7. `help` - Displays the list of all available builtin functions
+8. `usage` - Displays how to use the specified builtin function
+9. `setcolor` - To change prompt colour
+
+The codebase is structured such that each builtin function is its own C file to improve readability and to follow a more modular structure.
 
 ## Files Directory
 
@@ -101,6 +134,7 @@ make integration
 # Additional Features
 
 ## Inclusivity
+Our shell includes helpful, beginner-friendly support when an invalid function is called, or if a function is given invalid arguments.
 
 
 
