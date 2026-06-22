@@ -23,6 +23,142 @@ int (*builtin_command_func[])(char **) = {
     &shell_setcolor
     };
 
+
+void auto_path(){
+    char path[PATH_MAX];
+    char PATHSET[PATH_MAX+9];
+
+    ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+    if (len != -1)
+    {
+        path[len] = '\0';
+        char *last_slash = strrchr(path, '/');
+        if (last_slash != NULL)
+        {
+            *last_slash = '\0';
+        }
+        snprintf(PATHSET, sizeof(PATHSET), "CSE_PATH=%s/bin", path);
+        putenv(PATHSET);
+        
+    }
+    else
+    {
+        perror("readlink failed");
+    }
+}
+
+int read_rc(){
+    int child_status;
+    char *cmd[MAX_ARGS];
+    pid_t pid;
+    char path[PATH_MAX];
+    int exit_code;
+    char PATHSET[PATH_MAX];
+
+    ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+    if (len != -1)
+    {
+        path[len] = '\0';
+        char *last_slash = strrchr(path, '/');
+        if (last_slash != NULL)
+        {
+            *last_slash = '\0';
+        }
+        snprintf(PATHSET, sizeof(PATHSET), "%s/.cseshellrc", path);        
+    }
+
+    FILE *pipe = fopen(PATHSET, "r");
+    if (pipe == NULL) {
+        perror("popen");
+        return 1;
+    }
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+
+        buffer[strcspn(buffer, "\n")] = '\0';
+        if (buffer[0] == '\0' || buffer[0] == '#') {
+            continue;
+        }
+        for (int i = 0; i < MAX_ARGS; i++) {
+            cmd[i] = NULL;
+        }
+
+        int idx = 0;
+        char *space_thing = strtok(buffer, " \t");
+        while (space_thing != NULL && idx < MAX_ARGS - 1) {
+            cmd[idx] = space_thing;
+            idx++;
+            space_thing = strtok(NULL, " \t");
+        }
+        if(cmd[0]==NULL){
+            continue;
+        }
+        bool skipped = false;
+        if (strcmp(cmd[0], "usage") == 0)
+        {
+            if (cmd[1] == NULL || cmd[2] != NULL)
+            {
+                skipped = true;
+                printf("Usage: type usage <cmd> to get usage of command\n");
+            }
+            else
+            {
+                if (strcmp(cmd[1], "usage") == 0 || strcmp(cmd[1], "-h") == 0)
+                {
+                    skipped = true;
+                    printf("Usage: type usage <cmd> to get usage of command\n");
+                }
+                else if (strcmp(cmd[1], "exit") == 0)
+                {
+                    skipped = true;
+                    printf("Usage: type exit to terminate and exit the shell\n");
+                }
+                else
+                {
+                    cmd[0] = cmd[1];
+                    cmd[1] = "-h";
+                    cmd[2] = NULL;
+                }
+            }
+        }
+        if (skipped == false)
+        {
+            int check_result = builtin_func_check_lookup(cmd[0]);
+            if (check_result == -2)   // Not a built-in function
+            {
+                pid_t pid = fork();
+                if (pid == 0)
+                {
+                    char *cse_path = getenv("CSE_PATH");
+                    char *cse_path_copy = strdup(cse_path);
+                    char *part_path = strtok(cse_path_copy,":");
+
+                    while (part_path!=NULL){
+                        char full_path[PATH_MAX];
+                        snprintf(full_path,sizeof(full_path),"%s/%s",part_path,cmd[0]);
+                        execv(full_path, cmd);
+                        part_path = strtok(NULL,":");
+                    }
+                    free(cse_path_copy);
+
+                    printf("Command %s not found\n", cmd[0]);
+                    _exit(1);
+                }
+                waitpid(pid, &child_status, 0);
+            }
+            else
+            {
+                run_builtin(check_result, cmd);   // it IS a builtin — actually run it
+            }
+        }
+    }
+    
+    fclose(pipe);
+    // printf("Live daemons: %d\n", daemon_count);
+    return 0;
+}
+
+
 void sigintHandler(int sig_num){
     /*
     To catch signal interrupts(ctrl + c)
@@ -42,7 +178,7 @@ int main(void)
     // Define an array to hold the command and its arguments
     char *cmd[MAX_ARGS];
     int child_status;
-    pid_t pid;
+    // pid_t pid;
     signal(SIGINT, sigintHandler);
     type_prompt(); // Display the prompt
 
@@ -82,7 +218,6 @@ int main(void)
 
 
         // Formulate the full path of the command to be executed
-        
         // char full_path[PATH_MAX];
         // char cwd[1024];
         bool skipped = false;
@@ -145,15 +280,7 @@ int main(void)
                     printf("Command %s not found\n", cmd[0]);
                     return 1;
                 }
-
-                else if (pid < 0)
-                {
-                    perror("fork");
-                }
-                else
-                {
-                    waitpid(pid, &child_status, 0);
-                }
+                waitpid(pid, &child_status, 0);
             }
             else
             {
