@@ -37,6 +37,7 @@ void test_cd_no_argument_goes_home_and_returns_1(void)
 int main(void)
 {
     UNITY_BEGIN();
+    printf("TESTING CD\n\n");
 
     RUN_TEST(test_cd_help_flag_returns_0);
     RUN_TEST(test_cd_too_many_arguments_returns_1);

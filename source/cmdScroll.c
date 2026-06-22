@@ -4,11 +4,11 @@
 
 int get_history(char **args){
     // Function to get history
-    if (args[1] == NULL){
+    if (args[0] == NULL){
         char *username = getlogin();
         if(username==NULL){
             printf("User Home directory not found");
-            return 1;
+            return 0;
         }
         char historypath[PATH_MAX];
         snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
@@ -24,7 +24,7 @@ int get_history(char **args){
         }
 
         fclose(file);
-        return 0;
+        return 1;
     }
     else{
         if (strcmp(args[1], "-h") == 0){
@@ -38,23 +38,33 @@ int get_history(char **args){
 int add_history(char **args){
     // Function to add cmd to history
     // "a" appends to file
-    char *username = getlogin();
-        if(username==NULL){
-            printf("User Home directory not found");
-            return 1;
-        }
-        char historypath[PATH_MAX];
-        snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
-    FILE *file = fopen(historypath, "a");
-    if (file == NULL){
-        perror("Failed to open history");
-        return EXIT_FAILURE;
+    if (args[0] == NULL){
+        // If no arguments given, fail
+        return 1;    
     }
+    else if (args[1] != NULL){
+        // if more than 1 arguments given, fail
+        return 1;
+    }
+    else{
+        char *username = getlogin();
+            if(username==NULL){
+                printf("User Home directory not found");
+                return 1;
+            }
+            char historypath[PATH_MAX];
+            snprintf(historypath,sizeof(historypath),"/home/%s/.ss_history",username);
+        FILE *file = fopen(historypath, "a");
+        if (file == NULL){
+            perror("Failed to open history");
+            return EXIT_FAILURE;
+        }
 
-    fprintf(file, "%s\n", *args);
+        fprintf(file, "%s\n", *args);
 
-    fclose(file);
-    return 0;
+        fclose(file);
+        return 0;
+    }
 }
 
 // Function to delete all shell history

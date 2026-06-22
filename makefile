@@ -58,6 +58,7 @@ $(UNIT_BIN_DIR)/test_cd: EXTRA_SRC = $(SRC_ROOT)/cd.c
 $(UNIT_BIN_DIR)/test_clear: EXTRA_SRC = $(SRC_ROOT)/clear.c
 $(UNIT_BIN_DIR)/test_env: EXTRA_SRC = $(SRC_ROOT)/env.c
 $(UNIT_BIN_DIR)/test_usage: EXTRA_SRC = $(SRC_ROOT)/usage.c
+$(UNIT_BIN_DIR)/test_cmdScroll: EXTRA_SRC = $(SRC_ROOT)/cmdScroll.c
 
 $(UNIT_BIN_DIR)/test_%: $(UNIT_DIR)/test_%.c $(UNITY_DIR)/unity.c $(LIB_SOURCES)
 	@mkdir -p $(UNIT_BIN_DIR)
