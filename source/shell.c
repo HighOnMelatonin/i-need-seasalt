@@ -36,7 +36,7 @@ void read_command(char **cmd)
       }
 
   // Check if the line is about to exceed the maximum length, leaving room for the null terminator
-  if (count >= MAX_LINE - 1)
+  if (count >= MAX_LINE - 1  && i < MAX_ARGS - 1)
       {
   printf("Command is too long, unable to process\n");
   // Drain the rest of the current line so leftover characters do not get read as the next command
@@ -99,7 +99,13 @@ void type_prompt()
   char cwd[1024];
   getcwd(cwd, sizeof(cwd));
   char *username = getlogin();
-  printf("\033[1;%s%s\033[1;37m:\033[1;%s%s\033[1;37m$$\033[0m ", current_color,username,current_color, cwd);
+// getlogin can return NULL if there is no controlling terminal, for example when input is piped or redirected
+// printf with a NULL %s argument is undefined behaviour and can crash, so fall back to a placeholder
+if (username == NULL)
+  {
+username = "user";
+  }
+printf("\033[1;%s%s\033[1;37m:\033[1;%s%s\033[1;37m$$\033[0m ", current_color,username,current_color, cwd);
   // printf("$$ ");  // Print the shell prompt
 }
 
