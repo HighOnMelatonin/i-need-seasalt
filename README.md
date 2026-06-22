@@ -135,7 +135,7 @@ make integration
 
 ## Inclusivity
 Our shell includes helpful, beginner-friendly support when an invalid function is called, or if a function is given invalid arguments.
-
+For colorblind people we added "setcolor" built-in function which changes the colour of the prompt, so that the user can choose a color which is comfortable for their eyes.
 
 
 ## Sustainability
