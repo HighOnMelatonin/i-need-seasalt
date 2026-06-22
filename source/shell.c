@@ -58,10 +58,10 @@ void read_command(char **cmd)
   line[count] = '\0';
 
   // If only the newline character was entered, return without processing
-  if (count == 1)
+  if (count == 1){
     cmd[0] =NULL;
     return;
-
+  }
   // Use strtok to parse the first token (word) of the command
   command_token = strtok(line, " \n");
 
