@@ -12,7 +12,8 @@ void tearDown(void)
 /* setenv with KEY=VALUE should create the variable */
 void test_setenv_var_sets_environment_variable(void)
 {
-    char *args[] = {"setenv", "TEST_PA1_UNIT=hello", NULL};
+    char input[] = "TEST_PA1_UNIT=hello";
+    char *args[] = {"setenv", input, NULL};
 
     int result = setenv_var(args);
 
